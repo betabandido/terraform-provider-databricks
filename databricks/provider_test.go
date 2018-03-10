@@ -17,6 +17,16 @@ func init() {
 	}
 }
 
+func TestProvider(t *testing.T) {
+	if err := Provider().InternalValidate(); err != nil {
+		t.Fatalf("err: %s", err)
+	}
+}
+
+func TestProvider_impl(t *testing.T) {
+	var _ = Provider()
+}
+
 func testAccPreCheck(t *testing.T) {
 	if v := os.Getenv("DATABRICKS_DOMAIN"); v == "" {
 		t.Fatal("DATABRICKS_DOMAIN must be set for acceptance tests")

@@ -6,6 +6,7 @@ import (
 	"github.com/betabandido/databricks-sdk-go/client"
 	"github.com/betabandido/databricks-sdk-go/models"
 	"github.com/hashicorp/terraform/helper/schema"
+	"log"
 	"strings"
 )
 
@@ -20,6 +21,7 @@ func resourceDatabricksNotebook() *schema.Resource {
 			"path": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 			"language": {
 				Type:     schema.TypeString,
@@ -36,6 +38,8 @@ func resourceDatabricksNotebook() *schema.Resource {
 func resourceDatabricksNotebookCreate(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*Client).workspace
 
+	log.Print("[DEBUG] Creating notebook")
+
 	path := d.Get("path").(string)
 	language := models.WorkspaceLanguage(d.Get("language").(string))
 	content := d.Get("content").(string)
@@ -50,6 +54,7 @@ func resourceDatabricksNotebookCreate(d *schema.ResourceData, m interface{}) err
 	}
 
 	d.SetId(path)
+	log.Printf("[DEBUG] Notebook ID: %s", d.Id())
 
 	return nil
 }
@@ -65,6 +70,7 @@ func resourceDatabricksNotebookRead(d *schema.ResourceData, m interface{}) error
 	})
 	if err != nil {
 		if databricksError, ok := err.(client.Error); ok && databricksError.Code() == "RESOURCE_DOES_NOT_EXIST" {
+			log.Printf("[WARN] Notebook (%s) not found, removing from state", d.Id())
 			d.SetId("")
 			return nil
 		}
@@ -88,7 +94,7 @@ func resourceDatabricksNotebookSanitizeContent(content string) (*string, error) 
 	}
 
 	lines := strings.Split(string(decoded), "\n")
-	if lines[0] != "# Databricks notebook source" {
+	if !strings.Contains(lines[0], "Databricks notebook source") {
 		return nil, fmt.Errorf("notebook starts with unexpected text: %s", lines[0])
 	}
 
@@ -102,19 +108,19 @@ func resourceDatabricksNotebookSanitizeContent(content string) (*string, error) 
 func resourceDatabricksNotebookUpdate(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*Client).workspace
 
-	if d.HasChange("content") {
-		_, newContent := d.GetChange("content")
-		language := models.WorkspaceLanguage(d.Get("language").(string))
+	log.Printf("[DEBUG] Updating notebook: %s", d.Id())
 
-		err := apiClient.Import(&models.WorkspaceImportRequest{
-			Path:      d.Id(),
-			Language:  &language,
-			Content:   newContent.(string),
-			Overwrite: true,
-		})
-		if err != nil {
-			return err
-		}
+	language := models.WorkspaceLanguage(d.Get("language").(string))
+	content := d.Get("content").(string)
+
+	err := apiClient.Import(&models.WorkspaceImportRequest{
+		Path:      d.Id(),
+		Language:  &language,
+		Content:   content,
+		Overwrite: true,
+	})
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -122,6 +128,8 @@ func resourceDatabricksNotebookUpdate(d *schema.ResourceData, m interface{}) err
 
 func resourceDatabricksNotebookDelete(d *schema.ResourceData, m interface{}) error {
 	apiClient := m.(*Client).workspace
+
+	log.Printf("[DEBUG] Deleting notebook: %s", d.Id())
 
 	err := apiClient.Delete(&models.WorkspaceDeleteRequest{
 		Path: d.Id(),

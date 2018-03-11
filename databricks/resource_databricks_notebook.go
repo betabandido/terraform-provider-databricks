@@ -54,6 +54,7 @@ func resourceDatabricksNotebookCreate(d *schema.ResourceData, m interface{}) err
 	}
 
 	d.SetId(path)
+
 	log.Printf("[DEBUG] Notebook ID: %s", d.Id())
 
 	return nil

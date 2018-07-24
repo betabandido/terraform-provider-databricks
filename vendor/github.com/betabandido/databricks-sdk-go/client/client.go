@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -72,9 +73,12 @@ func (c *Client) Query(method string, path string, data interface{}) ([]byte, er
 
 	queryUrl := c.baseUrl.ResolveReference(u)
 
-	body, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
+	var body []byte = nil
+	if data != nil {
+		body, err = json.Marshal(data)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	request, err := http.NewRequest(method, queryUrl.String(), bytes.NewReader(body))
@@ -100,13 +104,19 @@ func (c *Client) Query(method string, path string, data interface{}) ([]byte, er
 		return nil, err
 	}
 
+	glog.Infof("Response bytes: %s", responseBytes)
+
 	if response.StatusCode != 200 {
-		errorResponse := models.ErrorResponse{}
-		err = json.Unmarshal(responseBytes, &errorResponse)
-		if err != nil {
-			return nil, err
+		if strings.Contains(response.Header.Get("Content-Type"), "json") {
+			errorResponse := models.ErrorResponse{}
+			err = json.Unmarshal(responseBytes, &errorResponse)
+			if err != nil {
+				return nil, err
+			}
+			return nil, Error{ErrorResponse: errorResponse}
+		} else {
+			return nil, fmt.Errorf("request error: %s", string(responseBytes))
 		}
-		return nil, Error{ErrorResponse: errorResponse}
 	}
 
 	return responseBytes, nil

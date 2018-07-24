@@ -62,11 +62,12 @@
   branch = "master"
   name = "github.com/betabandido/databricks-sdk-go"
   packages = [
+    "api/clusters",
     "api/workspace",
     "client",
     "models"
   ]
-  revision = "e13a096306fd8f42556d22ef592e35420839c7f0"
+  revision = "4941a1e806623acf94b45440d72c31f7d04dfa09"
 
 [[projects]]
   branch = "master"
@@ -228,6 +229,7 @@
     "helper/logging",
     "helper/resource",
     "helper/schema",
+    "httpclient",
     "moduledeps",
     "plugin",
     "plugin/discovery",
@@ -241,8 +243,8 @@
     "tfdiags",
     "version"
   ]
-  revision = "3802b14260603f90c7a1faf55994dcc8933e2069"
-  version = "v0.11.3"
+  revision = "41e50bd32a8825a84535e353c3674af8ce799161"
+  version = "v0.11.7"
 
 [[projects]]
   branch = "master"
@@ -325,12 +327,6 @@
   ]
   revision = "98eb9847f27ba2008d380a32c98be474dea55bdf"
   version = "v1.1.1"
-
-[[projects]]
-  name = "github.com/satori/go.uuid"
-  packages = ["."]
-  revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
-  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/ulikunitz/xz"
@@ -457,6 +453,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0e37fc12030c77813eef58143fc29541478d6a45d41576e4ed0d538dc79299cf"
+  inputs-digest = "d174f0f3f59792f97f2bd950153ae15fbc5cf294bcb316ce578e6a3d782033d8"
   solver-name = "gps-cdcl"
   solver-version = 1

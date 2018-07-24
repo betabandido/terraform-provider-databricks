@@ -59,3 +59,23 @@ func (w *Endpoint) Import(request *models.WorkspaceImportRequest) error {
 	_, err := w.Client.Query("POST", "workspace/import", request)
 	return err
 }
+
+func (w *Endpoint) List(request *models.WorkspaceListRequest) (*models.WorkspaceListResponse, error) {
+	bytes, err := w.Client.Query("GET", "workspace/list", request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := models.WorkspaceListResponse{}
+	err = json.Unmarshal(bytes, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+func (w *Endpoint) Mkdirs(request *models.WorkspaceMkdirsRequest) error {
+	_, err := w.Client.Query("POST", "workspace/mkdirs", request)
+	return err
+}

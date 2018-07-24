@@ -2,6 +2,7 @@ package databricks
 
 import (
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"github.com/betabandido/databricks-sdk-go/client"
 	"github.com/betabandido/databricks-sdk-go/models"
@@ -41,7 +42,7 @@ func testAccCheckDatabricksNotebookDestroy(s *terraform.State) error {
 	})
 
 	if err == nil {
-		return fmt.Errorf("notebook still exists")
+		return errors.New("notebook still exists")
 	}
 
 	respErr, ok := err.(client.Error)

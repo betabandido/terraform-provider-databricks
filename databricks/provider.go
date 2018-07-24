@@ -17,6 +17,7 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
+			"databricks_cluster":  resourceDatabricksCluster(),
 			"databricks_notebook": resourceDatabricksNotebook(),
 		},
 		ConfigureFunc: providerConfigure,

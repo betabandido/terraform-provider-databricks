@@ -1,6 +1,7 @@
 package databricks
 
 import (
+	"github.com/betabandido/databricks-sdk-go/api/clusters"
 	"github.com/betabandido/databricks-sdk-go/api/workspace"
 	apiClient "github.com/betabandido/databricks-sdk-go/client"
 )
@@ -11,6 +12,7 @@ type Config struct {
 }
 
 type Client struct {
+	clusters  *clusters.Endpoint
 	workspace *workspace.Endpoint
 }
 
@@ -23,6 +25,7 @@ func (c *Config) Client() (interface{}, error) {
 		return nil, err
 	}
 
+	client.clusters = &clusters.Endpoint{Client: cl}
 	client.workspace = &workspace.Endpoint{Client: cl}
 
 	return &client, nil

@@ -29,12 +29,56 @@ func resourceDatabricksCluster() *schema.Resource {
 				Required: true,
 			},
 			"num_workers": {
-				Type:     schema.TypeInt,
+				Type:          schema.TypeInt,
+				Optional:      true,
+				ConflictsWith: []string{"autoscale"},
+			},
+			"autoscale": {
+				Type:     schema.TypeSet,
 				Optional: true,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"min_workers": {
+							Type:     schema.TypeInt,
+							Required: true,
+						},
+						"max_workers": {
+							Type:     schema.TypeInt,
+							Required: true,
+						},
+					},
+				},
+				ConflictsWith: []string{"num_workers"},
 			},
 			"autotermination_minutes": {
 				Type:     schema.TypeInt,
 				Optional: true,
+			},
+			"aws_attributes": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"zone_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"ebs_volume_type": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"ebs_volume_count": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+						"ebs_volume_size": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -58,8 +102,18 @@ func resourceDatabricksClusterCreate(d *schema.ResourceData, m interface{}) erro
 		request.NumWorkers = int32(v.(int))
 	}
 
+	if v, ok := d.GetOk("autoscale"); ok {
+		autoscale := resourceDatabricksClusterExpandAutoscale(v.(*schema.Set).List())
+		request.Autoscale = &autoscale
+	}
+
 	if v, ok := d.GetOk("autotermination_minutes"); ok {
 		request.AutoterminationMinutes = int32(v.(int))
+	}
+
+	if v, ok := d.GetOk("aws_attributes"); ok {
+		awsAttributes := resourceDatabricksClusterExpandAwsAttributes(v.(*schema.Set).List())
+		request.AwsAttributes = &awsAttributes
 	}
 
 	resp, err := apiClient.Create(&request)
@@ -95,16 +149,11 @@ func resourceDatabricksClusterRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("spark_version", resp.SparkVersion)
 	d.Set("node_type_id", resp.NodeTypeId)
 	d.Set("num_workers", resp.NumWorkers)
+	d.Set("autoscale", resourceDatabricksClusterFlattenAutoscale(resp.Autoscale))
 	d.Set("autotermination_minutes", resp.AutoterminationMinutes)
+	d.Set("aws_attributes", resourceDatabricksClusterFlattenAwsAttributes(resp.AwsAttributes))
 
 	return nil
-}
-
-func resourceDatabricksClusterNotExistsError(err error) bool {
-	databricksError, ok := err.(client.Error)
-	return ok &&
-		databricksError.Code() == "INVALID_PARAMETER_VALUE" &&
-		strings.Contains(databricksError.Error(), "does not exist")
 }
 
 func resourceDatabricksClusterUpdate(d *schema.ResourceData, m interface{}) error {
@@ -130,4 +179,73 @@ func resourceDatabricksClusterDelete(d *schema.ResourceData, m interface{}) erro
 	d.SetId("")
 
 	return nil
+}
+
+func resourceDatabricksClusterNotExistsError(err error) bool {
+	databricksError, ok := err.(client.Error)
+	return ok &&
+		databricksError.Code() == "INVALID_PARAMETER_VALUE" &&
+		strings.Contains(databricksError.Error(), "does not exist")
+}
+
+func resourceDatabricksClusterExpandAutoscale(autoscale []interface{}) models.ClustersAutoScale {
+	autoscaleElem := autoscale[0].(map[string]interface{})
+
+	return models.ClustersAutoScale{
+		MinWorkers: int32(autoscaleElem["min_workers"].(int)),
+		MaxWorkers: int32(autoscaleElem["max_workers"].(int)),
+	}
+}
+
+func resourceDatabricksClusterFlattenAutoscale(autoscale *models.ClustersAutoScale) []map[string]interface{} {
+	result := make([]map[string]interface{}, 0)
+	if autoscale != nil {
+		result = append(result, map[string]interface{}{
+			"min_workers": autoscale.MinWorkers,
+			"max_workers": autoscale.MaxWorkers,
+		})
+	}
+	return result
+}
+
+func resourceDatabricksClusterExpandAwsAttributes(awsAttributes []interface{}) models.ClustersAwsAttributes {
+	awsAttributesElem := awsAttributes[0].(map[string]interface{})
+
+	result := models.ClustersAwsAttributes{}
+
+	if v, ok := awsAttributesElem["zone_id"]; ok {
+		result.ZoneId = v.(string)
+	}
+
+	if v, ok := awsAttributesElem["ebs_volume_type"]; ok {
+		volumeType := models.ClustersEbsVolumeType(v.(string))
+		result.EbsVolumeType = &volumeType
+	}
+
+	if v, ok := awsAttributesElem["ebs_volume_count"]; ok {
+		result.EbsVolumeCount = int32(v.(int))
+	}
+
+	if v, ok := awsAttributesElem["ebs_volume_size"]; ok {
+		result.EbsVolumeSize = int32(v.(int))
+	}
+
+	return result
+}
+
+func resourceDatabricksClusterFlattenAwsAttributes(awsAttributes *models.ClustersAwsAttributes) []map[string]interface{} {
+	result := make([]map[string]interface{}, 0)
+	if awsAttributes != nil {
+		attrs := make(map[string]interface{})
+		attrs["zone_id"] = awsAttributes.ZoneId
+		if awsAttributes.EbsVolumeType != nil {
+			attrs["ebs_volume_type"] = string(*awsAttributes.EbsVolumeType)
+			attrs["ebs_volume_count"] = int(awsAttributes.EbsVolumeCount)
+			attrs["ebs_volume_size"] = int(awsAttributes.EbsVolumeSize)
+		}
+
+		result = append(result, attrs)
+	}
+
+	return result
 }

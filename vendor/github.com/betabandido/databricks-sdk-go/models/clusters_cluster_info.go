@@ -32,15 +32,25 @@ type ClustersClusterInfo struct {
 
 	SparkConf map[string]string `json:"spark_conf,omitempty"`
 
+	AwsAttributes *ClustersAwsAttributes `json:"aws_attributes,omitempty"`
+
 	NodeTypeId string `json:"node_type_id,omitempty"`
 
 	DriverNodeTypeId string `json:"driver_node_type_id,omitempty"`
+
+	SshPublicKeys []string `json:"ssh_public_keys,omitempty"`
+
+	CustomTags map[string]string `json:"custom_tags,omitempty"`
 
 	ClusterLogConf *ClustersClusterLogConf `json:"cluster_log_conf,omitempty"`
 
 	SparkEnvVars map[string]string `json:"spark_env_vars,omitempty"`
 
 	AutoterminationMinutes int32 `json:"autotermination_minutes,omitempty"`
+
+	EnableElasticDisk bool `json:"enable_elastic_disk,omitempty"`
+
+	ClusterSource *ClustersClusterSource `json:"cluster_source,omitempty"`
 
 	State *ClustersClusterState `json:"state,omitempty"`
 

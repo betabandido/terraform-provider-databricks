@@ -20,9 +20,13 @@ type ClustersCreateRequest struct {
 
 	SparkConf map[string]string `json:"spark_conf,omitempty"`
 
+	AwsAttributes *ClustersAwsAttributes `json:"aws_attributes,omitempty"`
+
 	NodeTypeId string `json:"node_type_id"`
 
 	DriverNodeTypeId string `json:"driver_node_type_id,omitempty"`
+
+	SshPublicKeys []string `json:"ssh_public_keys,omitempty"`
 
 	CustomTags map[string]string `json:"custom_tags,omitempty"`
 

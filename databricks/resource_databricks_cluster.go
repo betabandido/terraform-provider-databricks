@@ -116,7 +116,7 @@ func resourceDatabricksClusterCreate(d *schema.ResourceData, m interface{}) erro
 		request.AwsAttributes = &awsAttributes
 	}
 
-	resp, err := apiClient.Create(&request)
+	resp, err := apiClient.CreateSync(&request)
 	if err != nil {
 		return err
 	}
@@ -157,9 +157,40 @@ func resourceDatabricksClusterRead(d *schema.ResourceData, m interface{}) error 
 }
 
 func resourceDatabricksClusterUpdate(d *schema.ResourceData, m interface{}) error {
-	// TODO: implement update
+	apiClient := m.(*Client).clusters
 
-	return nil
+	log.Printf("[DEBUG] Updating cluster: %s", d.Id())
+
+	request := models.ClustersEditRequest{}
+
+	request.ClusterId = d.Id()
+	request.SparkVersion = d.Get("spark_version").(string)
+	request.NodeTypeId = d.Get("node_type_id").(string)
+
+	if v, ok := d.GetOk("num_workers"); ok {
+		request.NumWorkers = int32(v.(int))
+	}
+
+	if v, ok := d.GetOk("autoscale"); ok {
+		autoscale := resourceDatabricksClusterExpandAutoscale(v.(*schema.Set).List())
+		request.Autoscale = &autoscale
+	}
+
+	if d.HasChange("name") {
+		request.ClusterName = d.Get("name").(string)
+	}
+
+	if d.HasChange("autotermination_minutes") {
+		request.AutoterminationMinutes = int32(d.Get("autotermination_minutes").(int))
+	}
+
+	if d.HasChange("aws_attributes") {
+		value := d.Get("awsAttributes").(*schema.Set).List()
+		awsAttributes := resourceDatabricksClusterExpandAwsAttributes(value)
+		request.AwsAttributes = &awsAttributes
+	}
+
+	return apiClient.EditSync(&request)
 }
 
 func resourceDatabricksClusterDelete(d *schema.ResourceData, m interface{}) error {
@@ -171,7 +202,7 @@ func resourceDatabricksClusterDelete(d *schema.ResourceData, m interface{}) erro
 		ClusterId: d.Id(),
 	}
 
-	err := apiClient.Delete(&request)
+	err := apiClient.DeleteSync(&request)
 	if err != nil {
 		return err
 	}

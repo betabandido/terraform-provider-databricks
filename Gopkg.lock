@@ -67,7 +67,7 @@
     "client",
     "models"
   ]
-  revision = "369718a5bb5b40a4bd61791f300f3ed23f8cf526"
+  revision = "fd717f3aecc09d3720d4d73f09b42e98e60d9ab7"
 
 [[projects]]
   branch = "master"

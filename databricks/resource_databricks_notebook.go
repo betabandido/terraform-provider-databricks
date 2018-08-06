@@ -114,17 +114,12 @@ func resourceDatabricksNotebookUpdate(d *schema.ResourceData, m interface{}) err
 	language := models.WorkspaceLanguage(d.Get("language").(string))
 	content := d.Get("content").(string)
 
-	err := apiClient.Import(&models.WorkspaceImportRequest{
+	return apiClient.Import(&models.WorkspaceImportRequest{
 		Path:      d.Id(),
 		Language:  &language,
 		Content:   content,
 		Overwrite: true,
 	})
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func resourceDatabricksNotebookDelete(d *schema.ResourceData, m interface{}) error {

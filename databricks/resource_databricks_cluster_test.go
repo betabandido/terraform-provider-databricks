@@ -104,6 +104,7 @@ resource "databricks_cluster" "cluster" {
 	node_type_id            = "Standard_D3_v2"
 	num_workers             = 1
 	autotermination_minutes = 10
+	permanently_delete      = true
 } 
 `
 }
@@ -116,6 +117,7 @@ resource "databricks_cluster" "cluster" {
 	node_type_id            = "Standard_D3_v2"
 	num_workers             = 2
 	autotermination_minutes = 15
+	permanently_delete      = true
 } 
 `
 }

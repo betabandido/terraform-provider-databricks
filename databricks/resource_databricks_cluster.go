@@ -80,6 +80,11 @@ func resourceDatabricksCluster() *schema.Resource {
 					},
 				},
 			},
+			"permanently_delete": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 		},
 	}
 }
@@ -205,6 +210,15 @@ func resourceDatabricksClusterDelete(d *schema.ResourceData, m interface{}) erro
 	err := apiClient.DeleteSync(&request)
 	if err != nil {
 		return err
+	}
+
+	if d.Get("permanently_delete").(bool) {
+		err := apiClient.PermanentDelete(&models.ClustersPermanentDeleteRequest{
+			ClusterId: d.Id(),
+		})
+		if err != nil {
+			return err
+		}
 	}
 
 	d.SetId("")

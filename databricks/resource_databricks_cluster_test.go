@@ -125,12 +125,13 @@ func TestDatabricksCluster_handlesNonExistingClusterError(t *testing.T) {
 		t.Fatal("An error was incorrectly classified as non-existing-cluster error")
 	}
 
-	if !resourceDatabricksClusterNotExistsError(client.Error{
-		ErrorResponse: models.ErrorResponse{
+	if !resourceDatabricksClusterNotExistsError(client.NewError(
+		models.ErrorResponse{
 			ErrorCode: "INVALID_PARAMETER_VALUE",
 			Message:   "Cluster foobar does not exist",
 		},
-	}) {
+		400,
+	)) {
 		t.Fatal("A non-existing-cluster error was not detected")
 	}
 }

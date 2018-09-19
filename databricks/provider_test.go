@@ -39,4 +39,11 @@ func testAccPreCheck(t *testing.T) {
 	if v := os.Getenv("DATABRICKS_WORKSPACE"); v == "" {
 		t.Fatal("DATABRICKS_WORKSPACE must be set for acceptance tests")
 	}
+
+	if v := os.Getenv("TEST_AWS"); v == "1" {
+		if arn := os.Getenv("AWS_ARN_ROLE"); arn == "" {
+			t.Fatal("AWS_ARN_ROLE must be set for acceptance tests with AWS")
+		}
+	}
+
 }

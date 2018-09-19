@@ -65,6 +65,10 @@ func resourceDatabricksCluster() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+						"instance_profile_arn": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
 						"ebs_volume_type": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -262,6 +266,10 @@ func resourceDatabricksClusterExpandAwsAttributes(awsAttributes []interface{}) m
 		result.ZoneId = v.(string)
 	}
 
+	if v, ok := awsAttributesElem["instance_profile_arn"]; ok {
+		result.InstanceProfileArn = v.(string)
+	}
+
 	if v, ok := awsAttributesElem["ebs_volume_type"]; ok {
 		volumeType := models.ClustersEbsVolumeType(v.(string))
 		result.EbsVolumeType = &volumeType
@@ -283,6 +291,7 @@ func resourceDatabricksClusterFlattenAwsAttributes(awsAttributes *models.Cluster
 	if awsAttributes != nil {
 		attrs := make(map[string]interface{})
 		attrs["zone_id"] = awsAttributes.ZoneId
+		attrs["instance_profile_arn"] = awsAttributes.InstanceProfileArn
 		if awsAttributes.EbsVolumeType != nil {
 			attrs["ebs_volume_type"] = string(*awsAttributes.EbsVolumeType)
 			attrs["ebs_volume_count"] = int(awsAttributes.EbsVolumeCount)

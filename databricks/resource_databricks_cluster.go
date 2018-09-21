@@ -89,6 +89,10 @@ func resourceDatabricksCluster() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
+			"spark_env_vars": &schema.Schema{
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -123,6 +127,18 @@ func resourceDatabricksClusterCreate(d *schema.ResourceData, m interface{}) erro
 	if v, ok := d.GetOk("aws_attributes"); ok {
 		awsAttributes := resourceDatabricksClusterExpandAwsAttributes(v.(*schema.Set).List())
 		request.AwsAttributes = &awsAttributes
+	}
+
+	if v, ok := d.GetOk("spark_env_vars"); ok {
+		sparkEnvVars := make(map[string]string)
+
+		for key, value := range v.(map[string]interface{}) {
+			switch value := value.(type) {
+			case string:
+				sparkEnvVars[key] = value
+			}
+		}
+		request.SparkEnvVars = sparkEnvVars
 	}
 
 	resp, err := apiClient.CreateSync(&request)
@@ -161,6 +177,7 @@ func resourceDatabricksClusterRead(d *schema.ResourceData, m interface{}) error 
 	d.Set("autoscale", resourceDatabricksClusterFlattenAutoscale(resp.Autoscale))
 	d.Set("autotermination_minutes", resp.AutoterminationMinutes)
 	d.Set("aws_attributes", resourceDatabricksClusterFlattenAwsAttributes(resp.AwsAttributes))
+	d.Set("spark_env_vars", resp.SparkEnvVars)
 
 	return nil
 }
@@ -196,6 +213,18 @@ func resourceDatabricksClusterUpdate(d *schema.ResourceData, m interface{}) erro
 	if v, ok := d.GetOk("aws_attributes"); ok {
 		awsAttributes := resourceDatabricksClusterExpandAwsAttributes(v.(*schema.Set).List())
 		request.AwsAttributes = &awsAttributes
+	}
+
+	if v, ok := d.GetOk("spark_env_vars"); ok {
+		sparkEnvVars := make(map[string]string)
+
+		for key, value := range v.(map[string]interface{}) {
+			switch value := value.(type) {
+			case string:
+				sparkEnvVars[key] = value
+			}
+		}
+		request.SparkEnvVars = sparkEnvVars
 	}
 
 	return apiClient.EditSync(&request)

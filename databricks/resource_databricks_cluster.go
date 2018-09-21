@@ -216,7 +216,7 @@ func resourceDatabricksClusterUpdate(d *schema.ResourceData, m interface{}) erro
 		request.AwsAttributes = &awsAttributes
 	}
 
-	if d.HasChanged("spark_env_vars") {
+	if d.HasChange("spark_env_vars") {
 		v := d.Get("spark_env_vars")
 		sparkEnvVars := make(map[string]string)
 

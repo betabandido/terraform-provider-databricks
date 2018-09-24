@@ -206,7 +206,7 @@ func resourceDatabricksClusterUpdate(d *schema.ResourceData, m interface{}) erro
 		request.Autoscale = &autoscale
 	}
 
-	if d.HasChange("autotermination_minutes") {
+	if v, ok := d.GetOk("autotermination_minutes"); ok {
 		request.AutoterminationMinutes = int32(d.Get("autotermination_minutes").(int))
 	}
 

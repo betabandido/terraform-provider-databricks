@@ -207,7 +207,7 @@ func resourceDatabricksClusterUpdate(d *schema.ResourceData, m interface{}) erro
 	}
 
 	if v, ok := d.GetOk("autotermination_minutes"); ok {
-        request.AutoterminationMinutes = int32(v.(int))
+		request.AutoterminationMinutes = int32(v.(int))
 	}
 
 	if v, ok := d.GetOk("aws_attributes"); ok {

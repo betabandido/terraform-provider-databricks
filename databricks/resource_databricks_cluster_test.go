@@ -18,7 +18,6 @@ func TestAccDatabricksCluster_basic(t *testing.T) {
 		return
 	}
 
-	return
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,

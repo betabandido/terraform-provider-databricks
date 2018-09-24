@@ -174,7 +174,9 @@ resource "databricks_cluster" "cluster" {
   num_workers                   = 1
   autotermination_minutes       = 10
   permanently_delete            = true
-  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
+  spark_env_vars {
+    "PYSPARK_PYTHON" = "/databricks/python3/bin/python3"
+  }
 } 
 `
 }
@@ -189,7 +191,9 @@ resource "databricks_cluster" "cluster" {
   num_workers                   = 1
   autotermination_minutes       = 10
   permanently_delete            = true
-  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
+  spark_env_vars = {
+    "PYSPARK_PYTHON" = "/databricks/python3/bin/python3"
+  }
   aws_attributes = {
     instance_profile_arn = "AWSARNSTRING"
     zone_id              = "eu-west-1a"
@@ -213,7 +217,9 @@ resource "databricks_cluster" "cluster" {
   num_workers                   = 2
   autotermination_minutes       = 15
   permanently_delete            = true
-  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
+  spark_env_vars = {
+    "PYSPARK_PYTHON" = "/databricks/python3/bin/python3"
+  }
 } 
 `
 }
@@ -227,7 +233,9 @@ resource "databricks_cluster" "cluster" {
   num_workers                   = 2
   autotermination_minutes       = 15
   permanently_delete            = true
-  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
+  spark_env_vars = {
+    "PYSPARK_PYTHON" = "/databricks/python3/bin/python3"
+  }
   aws_attributes = {
     instance_profile_arn = "AWSARNSTRING"
     zone_id              = "eu-west-1a"

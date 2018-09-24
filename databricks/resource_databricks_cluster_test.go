@@ -38,6 +38,8 @@ func TestAccDatabricksCluster_basic(t *testing.T) {
 						"databricks_cluster.cluster", "num_workers", "1"),
 					resource.TestCheckResourceAttr(
 						"databricks_cluster.cluster", "autotermination_minutes", "10"),
+					resource.TestCheckResourceAttr(
+						"databricks_cluster.cluster", "spark_env_vars.PYSPARK_PYTHON", "/databricks/python3/bin/python3"),
 				),
 			},
 			{
@@ -54,6 +56,8 @@ func TestAccDatabricksCluster_basic(t *testing.T) {
 						"databricks_cluster.cluster", "num_workers", "2"),
 					resource.TestCheckResourceAttr(
 						"databricks_cluster.cluster", "autotermination_minutes", "15"),
+					resource.TestCheckResourceAttr(
+						"databricks_cluster.cluster", "spark_env_vars.PYSPARK_PYTHON", "/databricks/python3/bin/python3"),
 				),
 			},
 		},
@@ -89,6 +93,8 @@ func TestAccDatabricksCluster_basic_aws(t *testing.T) {
 						"databricks_cluster.cluster", "num_workers", "1"),
 					resource.TestCheckResourceAttr(
 						"databricks_cluster.cluster", "autotermination_minutes", "10"),
+					resource.TestCheckResourceAttr(
+						"databricks_cluster.cluster", "spark_env_vars.PYSPARK_PYTHON", "/databricks/python3/bin/python3"),
 				),
 			},
 			{
@@ -107,6 +113,8 @@ func TestAccDatabricksCluster_basic_aws(t *testing.T) {
 						"databricks_cluster.cluster", "num_workers", "2"),
 					resource.TestCheckResourceAttr(
 						"databricks_cluster.cluster", "autotermination_minutes", "15"),
+					resource.TestCheckResourceAttr(
+						"databricks_cluster.cluster", "spark_env_vars.PYSPARK_PYTHON", "/databricks/python3/bin/python3"),
 				),
 			},
 		},
@@ -160,12 +168,13 @@ func testAccCheckDatabricksClusterDestroy(s *terraform.State) error {
 func testAccDatabricksClusterConfig() string {
 	return `
 resource "databricks_cluster" "cluster" {
-	name                    = "tf-test-cluster"
-	spark_version           = "4.2.x-scala2.11"
-	node_type_id            = "m4.large"
-	num_workers             = 1
-	autotermination_minutes = 10
-	permanently_delete      = true
+  name                          = "tf-test-cluster"
+  spark_version                 = "4.2.x-scala2.11"
+  node_type_id                  = "m4.large"
+  num_workers                   = 1
+  autotermination_minutes       = 10
+  permanently_delete            = true
+  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
 } 
 `
 }
@@ -174,18 +183,19 @@ func testAccDatabricksClusterConfigAws(awsARNString string) string {
 
 	awsTestConfig := `
 resource "databricks_cluster" "cluster" {
-  name                    = "tf-test-cluster"
-  spark_version           = "4.2.x-scala2.11"
-  node_type_id            = "m4.large"
-  num_workers             = 1
-  autotermination_minutes = 10
-  permanently_delete      = true
+  name                          = "tf-test-cluster"
+  spark_version                 = "4.2.x-scala2.11"
+  node_type_id                  = "m4.large"
+  num_workers                   = 1
+  autotermination_minutes       = 10
+  permanently_delete            = true
+  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
   aws_attributes = {
-    instance_profile_arn    = "AWSARNSTRING"
-    zone_id          = "eu-west-1a"
-    ebs_volume_type  = "THROUGHPUT_OPTIMIZED_HDD"
-    ebs_volume_count = 1
-    ebs_volume_size  = 500
+    instance_profile_arn = "AWSARNSTRING"
+    zone_id              = "eu-west-1a"
+    ebs_volume_type      = "THROUGHPUT_OPTIMIZED_HDD"
+    ebs_volume_count     = 1
+    ebs_volume_size      = 500
   }
 }
 `
@@ -197,12 +207,13 @@ resource "databricks_cluster" "cluster" {
 func testAccDatabricksClusterConfigUpdate() string {
 	return `
 resource "databricks_cluster" "cluster" {
-	name                    = "tf-test-cluster-renamed"
-	spark_version           = "4.2.x-scala2.11"
-	node_type_id            = "Standard_D3_v2"
-	num_workers             = 2
-	autotermination_minutes = 15
-	permanently_delete      = true
+  name                          = "tf-test-cluster-renamed"
+  spark_version                 = "4.2.x-scala2.11"
+  node_type_id                  = "Standard_D3_v2"
+  num_workers                   = 2
+  autotermination_minutes       = 15
+  permanently_delete            = true
+  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
 } 
 `
 }
@@ -210,18 +221,19 @@ resource "databricks_cluster" "cluster" {
 func testAccDatabricksClusterConfigUpdateAws(awsARNString string) string {
 	awsTestConfig := `
 resource "databricks_cluster" "cluster" {
-  name                    = "tf-test-cluster-renamed"
-  spark_version           = "4.2.x-scala2.11"
-  node_type_id            = "m4.large"
-  num_workers             = 2
-  autotermination_minutes = 15
-  permanently_delete      = true
+  name                          = "tf-test-cluster-renamed"
+  spark_version                 = "4.2.x-scala2.11"
+  node_type_id                  = "m4.large"
+  num_workers                   = 2
+  autotermination_minutes       = 15
+  permanently_delete            = true
+  spark_env_vars.PYSPARK_PYTHON = "/databricks/python3/bin/python3"
   aws_attributes = {
-    instance_profile_arn    = "AWSARNSTRING"
-    zone_id          = "eu-west-1a"
-    ebs_volume_type  = "THROUGHPUT_OPTIMIZED_HDD"
-    ebs_volume_count = 1
-    ebs_volume_size  = 500
+    instance_profile_arn = "AWSARNSTRING"
+    zone_id              = "eu-west-1a"
+    ebs_volume_type      = "THROUGHPUT_OPTIMIZED_HDD"
+    ebs_volume_count     = 1
+    ebs_volume_size      = 500
   }
 }
 `

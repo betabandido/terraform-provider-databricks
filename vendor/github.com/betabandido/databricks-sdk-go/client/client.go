@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/betabandido/databricks-sdk-go/models"
+	"github.com/tcz001/databricks-sdk-go/models"
 	"github.com/golang/glog"
 	"io/ioutil"
 	"net"

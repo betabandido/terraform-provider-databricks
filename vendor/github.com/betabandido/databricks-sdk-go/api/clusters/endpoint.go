@@ -3,8 +3,8 @@ package clusters
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/betabandido/databricks-sdk-go/client"
-	"github.com/betabandido/databricks-sdk-go/models"
+	"github.com/tcz001/databricks-sdk-go/client"
+	"github.com/tcz001/databricks-sdk-go/models"
 	"time"
 )
 

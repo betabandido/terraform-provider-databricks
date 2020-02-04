@@ -26,17 +26,17 @@ provider "databricks" {
 Building The Provider
 ---------------------
 
-Clone repository to: `$GOPATH/src/github.com/betabandido/terraform-provider-databricks`
+Clone repository to: `$GOPATH/src/github.com/tcz001/terraform-provider-databricks`
 
 ```sh
-$ mkdir -p $GOPATH/src/github.com/betabandido; cd $GOPATH/src/github.com/betabandido
-$ git clone git@github.com:betabandido/terraform-provider-databricks
+$ mkdir -p $GOPATH/src/github.com/tcz001; cd $GOPATH/src/github.com/tcz001
+$ git clone git@github.com:tcz001/terraform-provider-databricks
 ```
 
 Enter the provider directory and build the provider
 
 ```sh
-$ cd $GOPATH/src/github.com/betabandido/terraform-provider-databricks
+$ cd $GOPATH/src/github.com/tcz001/terraform-provider-databricks
 $ make build
 ```
 

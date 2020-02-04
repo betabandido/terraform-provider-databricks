@@ -49,11 +49,11 @@ github.com/aws/aws-sdk-go/aws/credentials/endpointcreds
 github.com/aws/aws-sdk-go/private/protocol/query
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
 github.com/aws/aws-sdk-go/private/protocol/query/queryutil
-# github.com/betabandido/databricks-sdk-go v0.0.0-20180806213607-fd717f3aecc0
-github.com/betabandido/databricks-sdk-go/api/clusters
-github.com/betabandido/databricks-sdk-go/api/workspace
-github.com/betabandido/databricks-sdk-go/client
-github.com/betabandido/databricks-sdk-go/models
+# github.com/tcz001/databricks-sdk-go v0.0.0-20180806213607-fd717f3aecc0
+github.com/tcz001/databricks-sdk-go/api/clusters
+github.com/tcz001/databricks-sdk-go/api/workspace
+github.com/tcz001/databricks-sdk-go/client
+github.com/tcz001/databricks-sdk-go/models
 # github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d
 github.com/bgentry/go-netrc/netrc
 # github.com/bgentry/speakeasy v0.1.0

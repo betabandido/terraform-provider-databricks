@@ -1,9 +1,9 @@
 package databricks
 
 import (
-	"github.com/betabandido/databricks-sdk-go/client"
-	"github.com/betabandido/databricks-sdk-go/models"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/tcz001/databricks-sdk-go/client"
+	"github.com/tcz001/databricks-sdk-go/models"
 	"log"
 	"strings"
 )

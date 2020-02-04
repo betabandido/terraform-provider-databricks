@@ -1,6 +1,6 @@
 [[constraint]]
   branch = "master"
-  name = "github.com/betabandido/databricks-sdk-go"
+  name = "github.com/tcz001/databricks-sdk-go"
 
 [[constraint]]
   name = "github.com/hashicorp/terraform"

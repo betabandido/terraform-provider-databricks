@@ -207,8 +207,9 @@ github.com/posener/complete/match
 # github.com/spf13/afero v1.2.1
 github.com/spf13/afero
 github.com/spf13/afero/mem
-# github.com/tcz001/databricks-sdk-go v0.0.0-20200204223018-ee9850e13ac3
+# github.com/tcz001/databricks-sdk-go v0.0.0-20200205004438-a6d2efbb06c4
 github.com/tcz001/databricks-sdk-go/api/clusters
+github.com/tcz001/databricks-sdk-go/api/secrets
 github.com/tcz001/databricks-sdk-go/api/workspace
 github.com/tcz001/databricks-sdk-go/client
 github.com/tcz001/databricks-sdk-go/models

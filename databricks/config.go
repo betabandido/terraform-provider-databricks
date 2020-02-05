@@ -1,10 +1,12 @@
 package databricks
 
 import (
+	"time"
+
 	"github.com/tcz001/databricks-sdk-go/api/clusters"
+	secrets "github.com/tcz001/databricks-sdk-go/api/secrets"
 	"github.com/tcz001/databricks-sdk-go/api/workspace"
 	apiClient "github.com/tcz001/databricks-sdk-go/client"
-	"time"
 )
 
 const (
@@ -20,6 +22,7 @@ type Config struct {
 type Client struct {
 	clusters  *clusters.Endpoint
 	workspace *workspace.Endpoint
+	secrets   *secrets.Endpoint
 }
 
 func (c *Config) Client() (interface{}, error) {
@@ -38,6 +41,7 @@ func (c *Config) Client() (interface{}, error) {
 
 	client.clusters = &clusters.Endpoint{Client: cl}
 	client.workspace = &workspace.Endpoint{Client: cl}
+	client.secrets = &secrets.Endpoint{Client: cl}
 
 	return &client, nil
 }

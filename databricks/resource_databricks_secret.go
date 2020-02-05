@@ -94,11 +94,12 @@ func resourceDatabricksSecretDelete(d *schema.ResourceData, m interface{}) error
 
 	log.Printf("[DEBUG] Deleting secret: %s", d.Id())
 
-	request := models.SecretsScopesDeleteRequest{
-		Scope: d.Id(),
+	request := models.SecretsDeleteRequest{
+		Scope: d.Get("scope").(string),
+		Key:   d.Get("key").(string),
 	}
 
-	err := apiClient.DeleteScope(&request)
+	err := apiClient.Delete(&request)
 	if err != nil {
 		return err
 	}

@@ -49,11 +49,6 @@ github.com/aws/aws-sdk-go/aws/credentials/endpointcreds
 github.com/aws/aws-sdk-go/private/protocol/query
 github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil
 github.com/aws/aws-sdk-go/private/protocol/query/queryutil
-# github.com/tcz001/databricks-sdk-go v0.0.0-20180806213607-fd717f3aecc0
-github.com/tcz001/databricks-sdk-go/api/clusters
-github.com/tcz001/databricks-sdk-go/api/workspace
-github.com/tcz001/databricks-sdk-go/client
-github.com/tcz001/databricks-sdk-go/models
 # github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d
 github.com/bgentry/go-netrc/netrc
 # github.com/bgentry/speakeasy v0.1.0
@@ -212,6 +207,11 @@ github.com/posener/complete/match
 # github.com/spf13/afero v1.2.1
 github.com/spf13/afero
 github.com/spf13/afero/mem
+# github.com/tcz001/databricks-sdk-go v0.0.0-20200204223018-ee9850e13ac3
+github.com/tcz001/databricks-sdk-go/api/clusters
+github.com/tcz001/databricks-sdk-go/api/workspace
+github.com/tcz001/databricks-sdk-go/client
+github.com/tcz001/databricks-sdk-go/models
 # github.com/ulikunitz/xz v0.5.5
 github.com/ulikunitz/xz
 github.com/ulikunitz/xz/internal/xlog

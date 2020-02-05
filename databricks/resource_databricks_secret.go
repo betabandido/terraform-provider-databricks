@@ -55,7 +55,6 @@ func resourceDatabricksSecretPut(d *schema.ResourceData, m interface{}) error {
 		request.BytesValue = v.(string)
 	}
 
-	log.Printf("[DEBUG] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 	err := apiClient.Put(&request)
 	if err != nil {
 		return err
@@ -77,12 +76,12 @@ func resourceDatabricksSecretRead(d *schema.ResourceData, m interface{}) error {
 
 	resp, err := apiClient.List(&request)
 	if err != nil {
-		if resourceDatabricksSecretNotExistsError(d.Get("key").(string), resp) {
-			log.Printf("[WARN] Secret (%s) not found, removing from state", d.Id())
-			d.SetId("")
-			return nil
-		}
 		return err
+	}
+	if !resourceDatabricksSecretNotExistsError(d.Get("key").(string), resp) {
+		log.Printf("[WARN] Secret (%s) not found, removing from state", d.Id())
+		d.SetId("")
+		return nil
 	}
 
 	d.SetId(d.Get("scope").(string) + "/" + d.Get("key").(string))

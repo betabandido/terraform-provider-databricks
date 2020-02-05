@@ -60,12 +60,12 @@ func resourceDatabricksSecretScopeRead(d *schema.ResourceData, m interface{}) er
 
 	resp, err := apiClient.ListScopes()
 	if err != nil {
-		if resourceDatabricksSecretScopeNotExistsError(d.Id(), resp) {
-			log.Printf("[WARN] SecretScope (%s) not found, removing from state", d.Id())
-			d.SetId("")
-			return nil
-		}
 		return err
+	}
+	if !resourceDatabricksSecretScopeNotExistsError(d.Id(), resp) {
+		log.Printf("[WARN] SecretScope (%s) not found, removing from state", d.Id())
+		d.SetId("")
+		return nil
 	}
 
 	d.Set("name", d.Id())

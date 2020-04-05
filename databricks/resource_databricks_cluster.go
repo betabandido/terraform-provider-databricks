@@ -3,7 +3,7 @@ package databricks
 import (
 	"github.com/betabandido/databricks-sdk-go/client"
 	"github.com/betabandido/databricks-sdk-go/models"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"log"
 	"strings"
 )
@@ -154,13 +154,13 @@ func resourceDatabricksClusterRead(d *schema.ResourceData, m interface{}) error 
 		return err
 	}
 
-	d.Set("name", resp.ClusterName)
-	d.Set("spark_version", resp.SparkVersion)
-	d.Set("node_type_id", resp.NodeTypeId)
-	d.Set("num_workers", resp.NumWorkers)
-	d.Set("autoscale", resourceDatabricksClusterFlattenAutoscale(resp.Autoscale))
-	d.Set("autotermination_minutes", resp.AutoterminationMinutes)
-	d.Set("aws_attributes", resourceDatabricksClusterFlattenAwsAttributes(resp.AwsAttributes))
+	_ = d.Set("name", resp.ClusterName)
+	_ = d.Set("spark_version", resp.SparkVersion)
+	_ = d.Set("node_type_id", resp.NodeTypeId)
+	_ = d.Set("num_workers", resp.NumWorkers)
+	_ = d.Set("autoscale", resourceDatabricksClusterFlattenAutoscale(resp.Autoscale))
+	_ = d.Set("autotermination_minutes", resp.AutoterminationMinutes)
+	_ = d.Set("aws_attributes", resourceDatabricksClusterFlattenAwsAttributes(resp.AwsAttributes))
 
 	return nil
 }

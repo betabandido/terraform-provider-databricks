@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/betabandido/databricks-sdk-go/client"
 	"github.com/betabandido/databricks-sdk-go/models"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"log"
 	"strings"
 )
@@ -49,7 +49,7 @@ func resourceDatabricksNotebookCreate(d *schema.ResourceData, m interface{}) err
 		Language: &language,
 		Content:  content,
 	})
-	if err != nil {
+	if nil != err {
 		return err
 	}
 
@@ -83,7 +83,7 @@ func resourceDatabricksNotebookRead(d *schema.ResourceData, m interface{}) error
 		return err
 	}
 
-	d.Set("content", *content)
+	_ = d.Set("content", *content)
 
 	return nil
 }

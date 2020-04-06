@@ -161,6 +161,8 @@ github.com/nenetto/databricks-sdk-go v0.3.1 h1:CktGgQTdAtEIhux8b3yaCsly0MBEbVx1u
 github.com/nenetto/databricks-sdk-go v0.3.1/go.mod h1:bCcoI1bxae8Hb/pn8zqx4dRkF1Yla3d9qtHIoJ+YwIA=
 github.com/nenetto/databricks-sdk-go v0.3.2 h1:fW8NLZ346olbkaYQA1etNtqvhhkbfF1p+QkybY3SMwU=
 github.com/nenetto/databricks-sdk-go v0.3.2/go.mod h1:bCcoI1bxae8Hb/pn8zqx4dRkF1Yla3d9qtHIoJ+YwIA=
+github.com/nenetto/databricks-sdk-go v0.3.3 h1:/0ifBSLXYibAbQa+LvDCVeh25Hs5DTTRVFLyLbD2r8I=
+github.com/nenetto/databricks-sdk-go v0.3.3/go.mod h1:bCcoI1bxae8Hb/pn8zqx4dRkF1Yla3d9qtHIoJ+YwIA=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=

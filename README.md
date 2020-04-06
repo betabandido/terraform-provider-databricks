@@ -1,6 +1,9 @@
 Terraform Provider
 ==================
 
+> **All the credits to [betabandido](https://github.com/betabandido/terraform-provider-databricks). I just fork the repository and make some changes to work as I think my terraform scripts should work.**
+
+
 - Website: https://www.terraform.io
 - Mailing list: [Google Groups](http://groups.google.com/group/terraform-tool)
 
@@ -30,6 +33,9 @@ Enter the provider directory and build the provider
 $ cd terraform-provider-databricks
 $ go build -o bin/terraform-provider-databricks
 ```
+
+Copy the binary generated file into your /.terraform/plugins/<architecture>/terraform-provider-databricks.
+**The name of the plugin is IMPORTANT and must not be changed in order to make it work in terraform**
 
 Using the provider
 ----------------------

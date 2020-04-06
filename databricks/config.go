@@ -1,9 +1,9 @@
 package databricks
 
 import (
-	"github.com/betabandido/databricks-sdk-go/api/clusters"
-	"github.com/betabandido/databricks-sdk-go/api/workspace"
-	apiClient "github.com/betabandido/databricks-sdk-go/client"
+	"github.com/nenetto/databricks-sdk-go/api/clusters"
+	"github.com/nenetto/databricks-sdk-go/api/workspace"
+	apiClient "github.com/nenetto/databricks-sdk-go/client"
 	"time"
 )
 

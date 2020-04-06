@@ -1,9 +1,9 @@
 package databricks
 
 import (
-	"github.com/betabandido/databricks-sdk-go/client"
-	"github.com/betabandido/databricks-sdk-go/models"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nenetto/databricks-sdk-go/client"
+	"github.com/nenetto/databricks-sdk-go/models"
 	"log"
 	"strings"
 )
@@ -84,11 +84,6 @@ func resourceDatabricksCluster() *schema.Resource {
 					},
 				},
 			},
-			"permanently_delete": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
 		},
 	}
 }
@@ -125,12 +120,31 @@ func resourceDatabricksClusterCreate(d *schema.ResourceData, m interface{}) erro
 		request.AwsAttributes = &awsAttributes
 	}
 
-	resp, err := apiClient.CreateSync(&request)
-	if err != nil {
-		return err
+	respCreate, errCreate := apiClient.CreateSync(&request)
+	if errCreate != nil {
+		return errCreate
 	}
 
-	d.SetId(resp.ClusterId)
+	// Pin and Stop the cluster which means stop it in API to preserve the cluster and avoid permanent deletion
+	requestPin := models.ClustersEditRequest{
+		ClusterId: respCreate.ClusterId,
+	}
+
+	errPin := apiClient.Pin(&requestPin)
+	if errPin != nil {
+		return errPin
+	}
+
+	requestStop := models.ClustersDeleteRequest{
+		ClusterId: respCreate.ClusterId,
+	}
+
+	errStop := apiClient.DeleteSync(&requestStop)
+	if errStop != nil {
+		return errStop
+	}
+
+	d.SetId(respCreate.ClusterId)
 
 	log.Printf("[DEBUG] Cluster ID: %s", d.Id())
 
@@ -207,22 +221,30 @@ func resourceDatabricksClusterDelete(d *schema.ResourceData, m interface{}) erro
 
 	log.Printf("[DEBUG] Deleting cluster: %s", d.Id())
 
+	// UnPin
+	requestPin := models.ClustersEditRequest{
+		ClusterId: d.Id(),
+	}
+
+	errUnpin := apiClient.Unpin(&requestPin)
+	if errUnpin != nil {
+		return errUnpin
+	}
+
 	request := models.ClustersDeleteRequest{
 		ClusterId: d.Id(),
 	}
 
-	err := apiClient.DeleteSync(&request)
-	if err != nil {
-		return err
+	errDelete := apiClient.DeleteSync(&request)
+	if errDelete != nil {
+		return errDelete
 	}
 
-	if d.Get("permanently_delete").(bool) {
-		err := apiClient.PermanentDelete(&models.ClustersPermanentDeleteRequest{
-			ClusterId: d.Id(),
-		})
-		if err != nil {
-			return err
-		}
+	errPermanentDelete := apiClient.PermanentDelete(&models.ClustersPermanentDeleteRequest{
+		ClusterId: d.Id(),
+	})
+	if errPermanentDelete != nil {
+		return errPermanentDelete
 	}
 
 	d.SetId("")

@@ -4,3 +4,5 @@
 testing-terraform/terraform-provider-databricks
 
 testing-terraform/test_private.tf
+
+.DS_Store

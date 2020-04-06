@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/plugin"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"terraform-provider-databricks/databricks"
+	"github.com/nenetto/terraform-provider-databricks/databricks"
 )
 
 func main() {

@@ -3,9 +3,9 @@ package databricks
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/betabandido/databricks-sdk-go/client"
-	"github.com/betabandido/databricks-sdk-go/models"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nenetto/databricks-sdk-go/client"
+	"github.com/nenetto/databricks-sdk-go/models"
 	"log"
 	"strings"
 )

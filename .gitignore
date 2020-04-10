@@ -6,3 +6,13 @@ testing-terraform/terraform-provider-databricks
 testing-terraform/test_private.tf
 
 .DS_Store
+
+testing-terraform/.terraform/plugins/darwin_amd64/
+
+testing-terraform/crash.log
+
+testing-terraform/terraform.tfstate
+
+testing-terraform/testprovider.log
+
+testing-terraform/tflogs.log

@@ -593,13 +593,3 @@ func resourceDatabricksClusterFlattenLogConfiguration(logconf *models.ClustersCl
 
 	return result
 }
-
-func resourceDatabricksClusterExpandCustomTags(tags map[string]interface{}) map[string]string {
-	result := map[string]string{}
-
-	for k, v := range tags{
-		result[k] = v.(string)
-	}
-
-	return result
-}

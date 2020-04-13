@@ -1,9 +1,14 @@
 package databricks
 
 import (
+	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nenetto/databricks-sdk-go/client"
 	"github.com/nenetto/databricks-sdk-go/models"
-	"log"
+	"strings"
+	"time"
 )
 
 func resourceDatabricksInstanceprofile() *schema.Resource {
@@ -19,11 +24,18 @@ func resourceDatabricksInstanceprofile() *schema.Resource {
 				Required: true,
 			},
 		},
+		Timeouts: &schema.ResourceTimeout{
+		Create: schema.DefaultTimeout(5 * time.Minute),
+		},
+		CustomizeDiff: customdiff.All(
+			customdiff.ForceNewIfChange("arn", func (old, new, meta interface{}) bool {
+				return new.(string) != old.(string)
+			}),
+		),
 	}
 }
 
 func resourceDatabricksInstanceprofileCreate(d *schema.ResourceData, m interface{}) error {
-	log.Print("[DEBUG] Creating Databricks Instance Profile")
 	instanceProfileArn := d.Get("arn").(string)
 
 	apiClient := m.(*Client).instanceprofile
@@ -33,19 +45,33 @@ func resourceDatabricksInstanceprofileCreate(d *schema.ResourceData, m interface
 	}
 
 	err := apiClient.Add(&request)
-	if err != nil {
-		log.Print(err)
-		return err
-	}
 
-	d.SetId(instanceProfileArn)
+	return resource.Retry(d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
 
-	log.Printf("[DEBUG] Instance Profile ID: %s", d.Id())
-	return resourceDatabricksInstanceprofileRead(d, m)
+		if err != nil {
+			// If the instance is already added
+			if strings.Contains(err.Error(), "has already been added") {
+				d.SetId(instanceProfileArn)
+				return nil
+
+			// If the API failed, try again
+			} else if strings.Contains(err.Error(), "with Body length 0"){
+				return resource.RetryableError(fmt.Errorf("[TRACE] 🔴 %s", err))
+
+			// Other case
+			} else{
+				d.SetId("")
+				return resource.NonRetryableError(fmt.Errorf("[TRACE] 🔥 %s", err))
+			}
+		}
+
+		d.SetId(instanceProfileArn)
+		return nil
+
+	})
 }
 
 func resourceDatabricksInstanceprofileDelete(d *schema.ResourceData, m interface{}) error {
-	log.Printf("[DEBUG] Deleting cluster: %s", d.Id())
 	apiClient := m.(*Client).instanceprofile
 
 	request := models.InstanceprofileRemoveRequest{
@@ -54,6 +80,11 @@ func resourceDatabricksInstanceprofileDelete(d *schema.ResourceData, m interface
 
 	err := apiClient.Remove(&request)
 	if err != nil {
+		databricksError, ok := err.(client.Error)
+		if ok && strings.Contains(databricksError.Error(), "has been added to") {
+			d.SetId("")
+			return nil
+		}
 		return err
 	}
 
@@ -62,36 +93,26 @@ func resourceDatabricksInstanceprofileDelete(d *schema.ResourceData, m interface
 }
 
 func resourceDatabricksInstanceprofileRead(d *schema.ResourceData, m interface{}) error {
-	log.Printf("[DEBUG] Reading Instance Profiles: %s", d.Id())
-
 	apiClient := m.(*Client).instanceprofile
 
-	resp, err := apiClient.List()
-	if err == nil {
-		for _, ip := range resp.InstanceProfiles {
-			if ip.InstanceProfileArn == d.Id() {
-				d.SetId(ip.InstanceProfileArn)
-				return nil
-			}
-		}
-		log.Printf("[WARN] Instance Profile (%s) not registered, removing from state", d.Id())
-		d.SetId("")
-		return nil
+	request := models.InstanceprofileInfo{
+		InstanceProfileArn: d.Id(),
 	}
-	d.SetId("")
+
+	found := apiClient.Exist(&request)
+
+	if found {
+		_ = d.Set("arn", request.InstanceProfileArn)
+		_ = d.Set("is_meta_instance_profile", request.IsMetaInstanceProfile)
+		return nil
+	} else{
+		d.SetId("")
+		_ = d.Set("arn", request.InstanceProfileArn)
+		_ = d.Set("is_meta_instance_profile", request.IsMetaInstanceProfile)
+	}
 	return nil
 }
 
 func resourceDatabricksInstanceprofileUpdate(d *schema.ResourceData, m interface{}) error {
-
-	if d.HasChange("arn") {
-		// Delete and recreate
-		err := resourceDatabricksClusterDelete(d,m)
-		if err!=nil{
-			return err
-		}
-		return resourceDatabricksInstanceprofileCreate(d, m)
-	}
-
 	return resourceDatabricksInstanceprofileRead(d, m)
 }

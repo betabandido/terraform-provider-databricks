@@ -152,6 +152,8 @@ github.com/mitchellh/reflectwalk v1.0.1/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx
 github.com/nbio/st v0.0.0-20140626010706-e9e8d9816f32/go.mod h1:9wM+0iRr9ahx58uYLpLIr5fm8diHn0JbqRycJi6w0Ms=
 github.com/nenetto/databricks-sdk-go v0.4.0 h1:nBd6PbPXzyB0sTXrvWATDE+mXCrXt+FmubMnaCmnWyI=
 github.com/nenetto/databricks-sdk-go v0.4.0/go.mod h1:bCcoI1bxae8Hb/pn8zqx4dRkF1Yla3d9qtHIoJ+YwIA=
+github.com/nenetto/databricks-sdk-go v0.4.1 h1:npllP9YGzSKqiviracPWrpkEIaj3RrXw+eU3SQFh1a4=
+github.com/nenetto/databricks-sdk-go v0.4.1/go.mod h1:bCcoI1bxae8Hb/pn8zqx4dRkF1Yla3d9qtHIoJ+YwIA=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=

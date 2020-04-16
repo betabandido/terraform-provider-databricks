@@ -28,6 +28,10 @@ func resourceDatabricksCluster() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"enable_elastic_disk": {
+				Type:     schema.TypeBool,
+				Required: true,
+			},
 			"num_workers": {
 				Type:          schema.TypeInt,
 				Optional:      true,

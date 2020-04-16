@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/betabandido/terraform-provider-databricks/databricks"
-	"github.com/hashicorp/terraform/plugin"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/plugin"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/nenetto/terraform-provider-databricks/databricks"
 )
 
 func main() {

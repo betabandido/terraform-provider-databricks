@@ -1,14 +1,15 @@
 package databricks
 
 import (
-	"github.com/betabandido/databricks-sdk-go/api/clusters"
-	"github.com/betabandido/databricks-sdk-go/api/workspace"
-	apiClient "github.com/betabandido/databricks-sdk-go/client"
+	"github.com/nenetto/databricks-sdk-go/api/clusters"
+	"github.com/nenetto/databricks-sdk-go/api/instanceprofile"
+	"github.com/nenetto/databricks-sdk-go/api/workspace"
+	apiClient "github.com/nenetto/databricks-sdk-go/client"
 	"time"
 )
 
 const (
-	maxRetries = 3
+	maxRetries = 1
 	retryDelay = 5 * time.Second
 )
 
@@ -18,8 +19,9 @@ type Config struct {
 }
 
 type Client struct {
-	clusters  *clusters.Endpoint
-	workspace *workspace.Endpoint
+	clusters         *clusters.Endpoint
+	workspace        *workspace.Endpoint
+	instanceprofile  *instanceprofile.Endpoint
 }
 
 func (c *Config) Client() (interface{}, error) {
@@ -38,6 +40,7 @@ func (c *Config) Client() (interface{}, error) {
 
 	client.clusters = &clusters.Endpoint{Client: cl}
 	client.workspace = &workspace.Endpoint{Client: cl}
+	client.instanceprofile = &instanceprofile.Endpoint{Client: cl}
 
 	return &client, nil
 }

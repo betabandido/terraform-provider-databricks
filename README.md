@@ -1,6 +1,8 @@
 Terraform Provider
 ==================
 
+**NOTE: Databricks seems to have created an official Terraform provider available [here](https://github.com/databrickslabs/terraform-provider-databricks). Having an official, supported implementation makes this provider obsolete. Thus, this repository is now archived.**
+
 - Website: https://www.terraform.io
 - [![Gitter chat](https://badges.gitter.im/hashicorp-terraform/Lobby.png)](https://gitter.im/hashicorp-terraform/Lobby)
 - Mailing list: [Google Groups](http://groups.google.com/group/terraform-tool)
